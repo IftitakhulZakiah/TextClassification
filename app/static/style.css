@@ -1,0 +1,17 @@
+
+
+input#tweet {
+	width: 90%;
+	resize: vertical;
+	height: 60px;
+	/*height: auto;*/
+}
+
+input#submit {
+	font-family: Lato, Sans-Serif;
+	background-color: #CBF6FF;
+}
+
+.header {
+	background-color: #CBF6FF;
+}
