@@ -61,9 +61,9 @@ def index():
     if request.method == 'POST':
     	tweet = form.tweet.data
     	# tfidf_matrix = classification_tweet(tweet)
-        word_tokens, sent_tokens = tokenize_input(tweet)
-        sentence_imp = importance_sent(word_tokens, sent_tokens)
-        summary = summarize(sentence_imp, sent_tokens, 4)
+    	word_tokens, sent_tokens = tokenize_input(tweet)
+    	sentence_imp = importance_sent(word_tokens, sent_tokens)
+    	summary = summarize(sentence_imp, sent_tokens, 4)
         # with open(app.root_path + '/static/finalized_model.pickle','rb') as handle:
         # 	model = pickle.load(handle)
         # classification = model.predict([[tfidf_matrix]])
