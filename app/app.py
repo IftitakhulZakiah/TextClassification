@@ -3,16 +3,21 @@ from wtforms import Form, SubmitField, SelectField, IntegerField, validators, St
 import pandas as pd
 import numpy as np
 import pickle
-from nltk.tokenize import sent_tokenize, word_tokenize
-from nltk.corpus import stopwords
+import requests
+import re
+import json
+import unicodedata
+from nltk.tokenize import word_tokenize
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from string import punctuation
 from nltk.probability import FreqDist
 from heapq import nlargest
 from collections import defaultdict
 from collections import Counter
-from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
-import re
+from sklearn.feature_extraction.text import CountVectorizer
+from gensim.models import Word2Vec
+from gensim.models.doc2vec import TaggedDocument
 
 app = Flask(__name__)
 app.secret_key = 'development_key'
