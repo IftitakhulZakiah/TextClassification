@@ -1,12 +1,10 @@
+from __future__ import print_function
 from flask import Flask, render_template, flash, request
 from wtforms import Form, SubmitField, SelectField, IntegerField, validators, StringField
 import pandas as pd
 import numpy as np
 import pickle
-# from nltk.tokenize import word_tokenize
-# import requests
-import re
-# import json
+import re, sys
 import unicodedata
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
@@ -17,11 +15,6 @@ from sklearn.externals import joblib
 
 app = Flask(__name__)
 app.secret_key = 'development_key'
-
-with open(app.root_path + '/static/classifier.joblib','rb') as handle:
-	model = joblib.load(handle)
-# with open(app.root_path + '/static/count_vectorizer.joblib','rb') as handle:
-# 	extractor = joblib.load(handle)
 
 class predictForm(Form):
     tweet = StringField('Tweet')
@@ -53,21 +46,23 @@ def stemWord(text):
 
 def extract_tweet(tweet):
 	temp = stemWord(removeStopWord(removeTag(removeURL(tweet.encode('utf-8')))))
-	extractor = CountVectorizer()
-	extractor.fit(temp)
-	extracted = extractor.transform([[temp]])
-	return extracted
+	with open(app.root_path + '/static/vectorizer.joblib','rb') as handle:
+		extractor = joblib.load(handle)
+	vec = extractor.transform([temp])
+	return vec
 
 @app.route("/index", methods=['GET','POST'])
 def index():
     form = predictForm(request.form)
     result = ''
+    with open(app.root_path + '/static/svm-model.joblib','rb') as handle:
+		model = joblib.load(handle)
     if request.method == 'POST':
     	tweet = form.tweet.data
         classification = model.predict(extract_tweet(tweet))
-        if classification == 0:
+        if classification[0] == 0:
         	result = 'Keluhan'
-        elif classification == 1:
+        elif classification[0] == 1:
         	result = 'Respon'
         else:
         	result = 'Bukan Keluhan/Respon'
