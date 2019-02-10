@@ -8,7 +8,7 @@
 </head>
 <body style="font-family: Lato, Sans-Serif;">
 <div class="container" style="text-align:center;">
-    <h2 style="text-align:center; background-color: #847d60; margin: 0; padding: 40px 0;">Kategorisasi Keluhan</h2>
+    <h2 style="text-align:center; background-color: #847d60; margin: 0; padding: 40px 0;">Klasifikasi Keluhan</h2>
     <form action="{{url_for('index')}}" method='POST' style="width: 100%">
       <br><br><br>
       <h3 style="text-align:center;">{{ form.tweet.label }}</h3>
@@ -17,8 +17,7 @@
 
     </form>
     <br><br><br>
-    <h3 style="text-align:center;">Kategori</h3>
-    <p style="width: 100%;">{{ summary }}</p>
-    <!-- <p>{{ classification }}</p> -->
+    <h3 style="text-align:center;">Klasifikasi</h3>
+    <p style="width: 100%;">{{ classification }}</p>
 </body>
 </html>

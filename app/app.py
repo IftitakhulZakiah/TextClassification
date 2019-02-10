@@ -21,6 +21,10 @@ from sklearn.externals import joblib
 app = Flask(__name__)
 app.secret_key = 'development_key'
 
+with open(app.root_path + '/static/classifier.joblib','rb') as handle:
+	model = joblib.load(handle)
+classification = model.predict(tweet)
+
 class predictForm(Form):
     tweet = StringField('Tweet')
     submit = SubmitField('Submit')
@@ -85,22 +89,23 @@ def stemWord(text):
 def extract_tweet(tweet):
 	temp = stemWord(removeStopWord(removedPunctutation(removeTag(removeURL(tweet)))))
 	# tfidf_vectorizer = TfidfVectorizer(max_df=0.85, min_df=0.1, stop_words=stop_words, use_idf=True, tokenizer=tokenize_stem)
-	tfidf_matrix = tfidf_vectorizer.fit_transform([[temp]])
-	return tfidf_matrix
+	# tfidf_matrix = tfidf_vectorizer.fit_transform([[temp]])
+	return temp
 
 @app.route("/index", methods=['GET','POST'])
 def index():
     form = predictForm(request.form)
-    summary = ''		
     if request.method == 'POST':
     	tweet = form.tweet.data
-    	tfidf_matrix = extract_tweet(tweet)
+    	# tfidf_matrix = extract_tweet(tweet)
     	# word_tokens, sent_tokens = tokenize_input(tweet)
     	# sentence_imp = importance_sent(word_tokens, sent_tokens)
     	# summary = summarize(sentence_imp, sent_tokens, 4)
-        with open(app.root_path + '/static/finalized_model.pickle','rb') as handle:
-        	model = pickle.load(handle)
-        classification = model.predict([[tfidf_matrix]])
+        # with open(app.root_path + '.../model/classifier.joblib','rb') as handle:
+        model = joblib.load('.../model/classifier.joblib')
+        # classification = model.predict([[tfidf_matrix]])
+        classification = model.predict(tweet)
+
     return render_template('index.html', form=form, classification=classification)    
     # return render_template('index.html', form=form, summary=summary, classification=areas[classification[0]])
 
